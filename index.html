@@ -19,9 +19,103 @@
     .animate-float {
       animation: floatSlow 4s ease-in-out infinite;
     }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    .animate-glow {
+      animation: pulseGlow 2.4s ease-in-out infinite;
+    }
+    @keyframes loadingBar {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    .animate-progress {
+      animation: loadingBar 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    /* Menyembunyikan kontrol bawaan video pada semua browser */
+    video::-webkit-media-controls {
+      display: none !important;
+    }
+    video::-webkit-media-controls-enclosure {
+      display: none !important;
+    }
   </style>
 </head>
-<body class="bg-amber-50/40 text-stone-800 antialiased selection:bg-amber-300 selection:text-stone-900">
+<body class="bg-amber-50/40 text-stone-800 antialiased selection:bg-amber-300 selection:text-stone-900 overflow-hidden" id="main-body">
+
+  <!-- =====================================================================
+       OVERLAY 1 & 2: CINEMATIC LOADING SCREEN + VIDEO IKLAN FULLSCREEN
+       ===================================================================== -->
+  <div id="cinematic-overlay" class="fixed inset-0 z-50 bg-stone-950 text-white flex flex-col items-center justify-center transition-opacity duration-700">
+    
+    <!-- TAHAP 1: CINEMATIC INTRO & LOADING -->
+    <div id="intro-stage" class="flex flex-col items-center text-center px-6 max-w-md w-full transition-all duration-500">
+      <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-white font-extrabold text-3xl shadow-2xl shadow-orange-500/30 mb-6 animate-glow">
+        DK
+      </div>
+      <span class="text-xs font-bold uppercase tracking-[0.25em] text-amber-400 mb-2">Mempersembahkan</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">Dimsum Kejutan</h2>
+      <p class="text-sm text-stone-400 mb-8">Lembut di Luar, Kejutan Keju Lumer di Dalam</p>
+
+      <!-- Progress Bar Sinematik -->
+      <div id="loading-bar-container" class="w-full h-1.5 bg-stone-800 rounded-full overflow-hidden mb-3">
+        <div class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-amber-300 animate-progress"></div>
+      </div>
+      <p id="loading-status" class="text-xs text-stone-400 tracking-wider uppercase mb-6">Menyiapkan Pengalaman...</p>
+
+      <!-- Tombol Mulai (Memicu Sound Sinematik + Video Iklan Bersuara) -->
+      <button
+        id="start-experience-btn"
+        onclick="startCinematicExperience()"
+        class="hidden px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 text-white font-extrabold text-sm tracking-wide shadow-xl shadow-orange-600/30 hover:scale-105 active:scale-95 transition cursor-pointer items-center gap-2.5"
+      >
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        Putar Iklan &amp; Masuk Website
+      </button>
+    </div>
+
+    <!-- TAHAP 2: VIDEO IKLAN FULLSCREEN TANPA CONTROL BAR -->
+    <div id="ad-video-stage" class="hidden fixed inset-0 bg-black flex items-center justify-center">
+      <!--
+        ===================================================================
+        SLOT VIDEO IKLAN
+        Ganti "URL_VIDEO_IKLAN_DISINI.mp4" dengan tautan file video .mp4 kamu.
+        Atribut "controls" sengaja TIDAK dipasang agar bar durasi & navigasi
+        di bawah video tidak muncul sama sekali.
+        ===================================================================
+      -->
+      <video
+        id="promo-video"
+        class="w-full h-full object-contain sm:object-cover pointer-events-none select-none"
+        playsinline
+        preload="auto"
+        onended="enterWebsite()"
+        onerror="handleVideoFallback()"
+      >
+        <source src="VIDEOIKLAN.mp4" type="video/mp4" />
+      </video>
+
+      <!-- Fallback Visual jika URL video belum diisi agar tetap terlihat sinematik -->
+      <div id="video-fallback-banner" class="hidden flex-col items-center text-center px-6 max-w-lg">
+        <span class="px-3 py-1 rounded-full bg-orange-500/20 border border-orange-500/40 text-amber-300 text-xs font-bold uppercase tracking-widest mb-4">
+          Slot Video Iklan Aktif
+        </span>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">Tautan Video Belum Diisi</h3>
+        <p class="text-sm text-stone-300 leading-relaxed mb-6">
+          Ganti <code class="bg-stone-800 text-amber-300 px-2 py-0.5 rounded font-mono">URL_VIDEO_IKLAN_DISINI.mp4</code> di dalam kode HTML dengan link video iklan kelompokmu. Website akan otomatis terbuka dalam beberapa detik.
+        </p>
+      </div>
+
+      <!-- Tombol Lewati Iklan (Pojok Kanan Atas, Tanpa Bar Durasi Bawah) -->
+      <button
+        onclick="enterWebsite()"
+        class="fixed top-5 right-5 z-50 px-4 py-2 rounded-full bg-stone-900/80 hover:bg-stone-800 border border-white/20 text-white/90 text-xs font-semibold backdrop-blur-md transition cursor-pointer"
+      >
+        Lewati Iklan &rarr;
+      </button>
+    </div>
+  </div>
 
   <!-- Banner Label Proyek Wajib -->
   <div class="bg-stone-900 text-amber-300 text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide">
@@ -97,13 +191,6 @@
       <!-- SLOT GAMBAR UTAMA (HERO) -->
       <div class="relative mx-auto w-full max-w-md lg:max-w-none">
         <div class="animate-float rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-amber-100/80 aspect-[4/3] relative flex items-center justify-center">
-          <!--
-            ===================================================================
-            SLOT GAMBAR 1 (FOTO UTAMA / KOTAK KEMASAN DIMSUM KEJUTAN)
-            Cara pakai: Ganti tulisan "URL_GAMBAR_UTAMA_DISINI" dengan link foto kamu.
-            Jika link sudah diisi, kotak panduan di bawahnya akan otomatis hilang.
-            ===================================================================
-          -->
           <img
             src="DIMSUMKEJUTAN1"
             alt="Kemasan dan Sajian Dimsum Keju - Dimsum Kejutan"
@@ -156,33 +243,24 @@
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
-        <!-- Keunggulan 1 -->
         <div class="bg-white p-7 rounded-2xl border border-amber-100 shadow-sm hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-extrabold text-xl mb-5">
-            01
-          </div>
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-extrabold text-xl mb-5">01</div>
           <h3 class="text-lg font-extrabold text-stone-900 mb-2">Isian Keju di Bagian Dalam</h3>
           <p class="text-sm text-stone-600 leading-relaxed">
             Menggunakan campuran keju cheddar dan mozzarella yang dibungkus langsung di tengah adonan ayam, memberikan sensasi lumer saat dimsum disajikan hangat.
           </p>
         </div>
 
-        <!-- Keunggulan 2 -->
         <div class="bg-white p-7 rounded-2xl border border-amber-100 shadow-sm hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-extrabold text-xl mb-5">
-            02
-          </div>
+          <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-extrabold text-xl mb-5">02</div>
           <h3 class="text-lg font-extrabold text-stone-900 mb-2">Komposisi Daging Ayam Dominan</h3>
           <p class="text-sm text-stone-600 leading-relaxed">
             Adonan dibuat dengan takaran daging ayam giling yang lebih banyak dibandingkan tepung tapioka sehingga menghasilkan tekstur padat, lembut, dan tidak keras saat dingin.
           </p>
         </div>
 
-        <!-- Keunggulan 3 -->
         <div class="bg-white p-7 rounded-2xl border border-amber-100 shadow-sm hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-800 flex items-center justify-center font-extrabold text-xl mb-5">
-            03
-          </div>
+          <div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-800 flex items-center justify-center font-extrabold text-xl mb-5">03</div>
           <h3 class="text-lg font-extrabold text-stone-900 mb-2">Pilihan Paket Fleksibel</h3>
           <p class="text-sm text-stone-600 leading-relaxed">
             Tersedia dalam tiga ukuran kemasan (Isi 2, Isi 10, dan Isi 20) yang dapat disesuaikan untuk camilan pribadi di sekolah maupun stok camilan di rumah.
@@ -201,7 +279,6 @@
         <p class="text-sm sm:text-base text-stone-600">Informasi bahan, ukuran per butir, serta pilihan paket bundle (harga simulasi proyek).</p>
       </div>
 
-      <!-- Informasi Spesifikasi Produk -->
       <div class="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-6 sm:p-8 mb-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div>
           <span class="text-xs font-bold uppercase text-orange-700 block mb-1">Bahan Utama</span>
@@ -221,9 +298,7 @@
         </div>
       </div>
 
-      <!-- Kartu Pilihan Paket Bundle -->
       <div class="grid md:grid-cols-3 gap-6 items-stretch">
-        <!-- Paket Isi 2 -->
         <div class="rounded-2xl border border-stone-200 bg-white p-7 flex flex-col justify-between hover:border-amber-400 transition">
           <div>
             <span class="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold mb-4">Paket Coba</span>
@@ -234,15 +309,9 @@
               <span class="text-xs text-stone-500 font-medium"> / porsi (2 pcs)</span>
             </div>
             <ul class="space-y-2.5 text-sm text-stone-600 mb-8">
-              <li class="flex items-center gap-2">
-                <span class="text-orange-600 font-bold">&#10003;</span> 2 butir Dimsum Keju hangat
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-orange-600 font-bold">&#10003;</span> 1 bungkus saus cocolan
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-orange-600 font-bold">&#10003;</span> Kemasan kertas praktis
-              </li>
+              <li class="flex items-center gap-2"><span class="text-orange-600 font-bold">&#10003;</span> 2 butir Dimsum Keju hangat</li>
+              <li class="flex items-center gap-2"><span class="text-orange-600 font-bold">&#10003;</span> 1 bungkus saus cocolan</li>
+              <li class="flex items-center gap-2"><span class="text-orange-600 font-bold">&#10003;</span> Kemasan kertas praktis</li>
             </ul>
           </div>
           <button onclick="pilihPaket('Bundle Isi 2 — Rp15.000')" class="w-full py-3 rounded-xl border-2 border-orange-600 text-orange-600 font-bold text-sm hover:bg-orange-600 hover:text-white transition">
@@ -250,7 +319,6 @@
           </button>
         </div>
 
-        <!-- Paket Isi 10 (Populer) -->
         <div class="rounded-2xl border-2 border-orange-500 bg-gradient-to-b from-amber-50/80 to-white p-7 flex flex-col justify-between shadow-lg relative">
           <div class="absolute -top-3.5 right-6 bg-orange-600 text-white text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
             Paling Diminati
@@ -264,15 +332,9 @@
               <span class="text-xs text-stone-500 font-medium"> / kotak (10 pcs)</span>
             </div>
             <ul class="space-y-2.5 text-sm text-stone-600 mb-8">
-              <li class="flex items-center gap-2">
-                <span class="text-orange-600 font-bold">&#10003;</span> 10 butir Dimsum Keju
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-orange-600 font-bold">&#10003;</span> 2 bungkus saus cocolan
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-orange-600 font-bold">&#10003;</span> Kotak kemasan eksklusif
-              </li>
+              <li class="flex items-center gap-2"><span class="text-orange-600 font-bold">&#10003;</span> 10 butir Dimsum Keju</li>
+              <li class="flex items-center gap-2"><span class="text-orange-600 font-bold">&#10003;</span> 2 bungkus saus cocolan</li>
+              <li class="flex items-center gap-2"><span class="text-orange-600 font-bold">&#10003;</span> Kotak kemasan eksklusif</li>
             </ul>
           </div>
           <button onclick="pilihPaket('Bundle Isi 10 — Rp70.000')" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-sm shadow-md hover:brightness-105 transition">
@@ -280,7 +342,6 @@
           </button>
         </div>
 
-        <!-- Paket Isi 20 -->
         <div class="rounded-2xl border border-stone-200 bg-white p-7 flex flex-col justify-between hover:border-amber-400 transition">
           <div>
             <span class="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold mb-4">Paket Keluarga</span>
@@ -291,15 +352,9 @@
               <span class="text-xs text-stone-500 font-medium"> / paket (20 pcs)</span>
             </div>
             <ul class="space-y-2.5 text-sm text-stone-600 mb-8">
-              <li class="flex items-center gap-2">
-                <span class="text-orange-600 font-bold">&#10003;</span> 20 butir Dimsum Keju
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-orange-600 font-bold">&#10003;</span> 4 bungkus saus cocolan
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-orange-600 font-bold">&#10003;</span> Tersedia opsi siap kukus / hangat
-              </li>
+              <li class="flex items-center gap-2"><span class="text-orange-600 font-bold">&#10003;</span> 20 butir Dimsum Keju</li>
+              <li class="flex items-center gap-2"><span class="text-orange-600 font-bold">&#10003;</span> 4 bungkus saus cocolan</li>
+              <li class="flex items-center gap-2"><span class="text-orange-600 font-bold">&#10003;</span> Tersedia opsi siap kukus / hangat</li>
             </ul>
           </div>
           <button onclick="pilihPaket('Bundle Isi 20 — Rp140.000')" class="w-full py-3 rounded-xl border-2 border-orange-600 text-orange-600 font-bold text-sm hover:bg-orange-600 hover:text-white transition">
@@ -310,7 +365,7 @@
     </div>
   </section>
 
-  <!-- 5. GALERI PRODUK (SLOT GAMBAR SIAP ISI) -->
+  <!-- 5. GALERI PRODUK -->
   <section id="galeri" class="py-16 sm:py-20 bg-amber-50/40">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
@@ -323,12 +378,6 @@
         <!-- SLOT GAMBAR GALERI 1 -->
         <figure class="bg-white rounded-2xl overflow-hidden border border-amber-100 shadow-sm">
           <div class="aspect-[16/10] overflow-hidden bg-amber-100/60 relative flex items-center justify-center">
-            <!--
-              ===================================================================
-              SLOT GAMBAR GALERI 1
-              Ganti "URL_GAMBAR_GALERI_1" dengan tautan foto dimsum pertama kamu.
-              ===================================================================
-            -->
             <img
               src="URL_GAMBAR_GALERI_1"
               alt="Sajian Dimsum Keju Kukus Hangat"
@@ -353,12 +402,6 @@
         <!-- SLOT GAMBAR GALERI 2 -->
         <figure class="bg-white rounded-2xl overflow-hidden border border-amber-100 shadow-sm">
           <div class="aspect-[16/10] overflow-hidden bg-amber-100/60 relative flex items-center justify-center">
-            <!--
-              ===================================================================
-              SLOT GAMBAR GALERI 2
-              Ganti "URL_GAMBAR_GALERI_2" dengan tautan foto dimsum kedua kamu.
-              ===================================================================
-            -->
             <img
               src="URL_GAMBAR_GALERI_2"
               alt="Tekstur Lembut Dimsum Keju"
@@ -405,7 +448,6 @@
         </a>
       </div>
 
-      <!-- Informasi Kontak Simulasi -->
       <div class="pt-8 mt-8 border-t border-white/20 grid sm:grid-cols-3 gap-4 text-xs sm:text-sm text-amber-50">
         <div>
           <strong class="block text-white">WhatsApp (Simulasi)</strong>
@@ -450,21 +492,126 @@
   </div>
 
   <script>
-    // Toggle Menu Ponsel
+    // 1. LOGIKA CINEMATIC LOADING + SOUND EFFECT OTOMATIS + VIDEO IKLAN
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.getElementById('loading-status').textContent = 'Siap Diputar';
+        const startBtn = document.getElementById('start-experience-btn');
+        startBtn.classList.remove('hidden');
+        startBtn.classList.add('inline-flex');
+      }, 2200);
+    });
+
+    // Generator Sound Effect Sinematik (Chord Hangat + Whoosh) via Web Audio API
+    function playCinematicIntroSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+
+        // Efek suara dentuman bass lembut (Sub-drop sinematik)
+        const subOsc = ctx.createOscillator();
+        const subGain = ctx.createGain();
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(140, now);
+        subOsc.frequency.exponentialRampToValueAtTime(42, now + 1.4);
+        subGain.gain.setValueAtTime(0.001, now);
+        subGain.gain.linearRampToValueAtTime(0.35, now + 0.08);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
+        subOsc.connect(subGain);
+        subGain.connect(ctx.destination);
+        subOsc.start(now);
+        subOsc.stop(now + 1.65);
+
+        // Harmoni akor kristal hangat (C Major 9)
+        const notes = [261.63, 329.63, 392.00, 493.88, 587.33];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+
+          gain.gain.setValueAtTime(0.0001, now + idx * 0.06);
+          gain.gain.linearRampToValueAtTime(0.08, now + idx * 0.06 + 0.15);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.2);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.06);
+          osc.stop(now + 2.3);
+        });
+      } catch (e) {
+        // Abaikan jika perangkat tidak mendukung Web Audio
+      }
+    }
+
+    function startCinematicExperience() {
+      playCinematicIntroSound();
+
+      const introStage = document.getElementById('intro-stage');
+      const adStage = document.getElementById('ad-video-stage');
+      const promoVideo = document.getElementById('promo-video');
+
+      introStage.classList.add('opacity-0', 'scale-95');
+
+      setTimeout(() => {
+        introStage.classList.add('hidden');
+        adStage.classList.remove('hidden');
+
+        // Putar video iklan penuh tanpa kontrol bawah
+        promoVideo.muted = false;
+        const playPromise = promoVideo.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            handleVideoFallback();
+          });
+        }
+      }, 450);
+    }
+
+    function handleVideoFallback() {
+      const promoVideo = document.getElementById('promo-video');
+      const fallbackBanner = document.getElementById('video-fallback-banner');
+      promoVideo.classList.add('hidden');
+      fallbackBanner.classList.remove('hidden');
+      fallbackBanner.classList.add('flex');
+
+      // Otomatis masuk ke website setelah 4 detik jika video belum diisi
+      setTimeout(() => {
+        enterWebsite();
+      }, 4000);
+    }
+
+    function enterWebsite() {
+      const overlay = document.getElementById('cinematic-overlay');
+      const promoVideo = document.getElementById('promo-video');
+      const body = document.getElementById('main-body');
+
+      if (promoVideo) {
+        promoVideo.pause();
+      }
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      body.classList.remove('overflow-hidden');
+
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 700);
+    }
+
+    // 2. TOGGLE MENU PONSEL
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     menuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
     });
 
-    // Tutup menu ponsel saat tautan diklik
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
       });
     });
 
-    // Notifikasi Toast saat tombol CTA diklik
+    // 3. NOTIFIKASI TOAST SIMULASI PEMESANAN
     let toastTimeout;
     function pilihPaket(namaPaket) {
       const toast = document.getElementById('toast');
