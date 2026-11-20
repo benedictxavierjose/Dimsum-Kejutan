@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dimsum Kejutan — Dimsum Keju Lumer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .animate-float {
+      animation: floatSlow 4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-amber-50/40 text-stone-800 antialiased selection:bg-amber-300 selection:text-stone-900">
+
+  <!-- Banner Label Proyek Wajib -->
+  <div class="bg-stone-900 text-amber-300 text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide">
+    Proyek pembelajaran kelas X SMA Erenos &bull; Website Simulasi Produk
+  </div>
+
+  <!-- Navigasi -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-amber-100 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="#pembuka" class="flex items-center gap-2.5 group">
+        <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-white font-extrabold text-lg shadow-sm group-hover:scale-105 transition">
+          DK
+        </span>
+        <div>
+          <span class="font-extrabold text-lg tracking-tight text-stone-900 block leading-none">Dimsum Kejutan</span>
+          <span class="text-[11px] font-semibold text-orange-600 uppercase tracking-wider">Dimsum Keju</span>
+        </div>
+      </a>
+
+      <!-- Menu Desktop -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-stone-600">
+        <a href="#deskripsi" class="hover:text-orange-600 transition">Produk</a>
+        <a href="#keunggulan" class="hover:text-orange-600 transition">Keunggulan</a>
+        <a href="#harga" class="hover:text-orange-600 transition">Detail &amp; Harga</a>
+        <a href="#galeri" class="hover:text-orange-600 transition">Galeri</a>
+        <a href="#kontak" class="px-4 py-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-sm hover:shadow-md hover:brightness-105 transition">
+          Pesan Sekarang
+        </a>
+      </nav>
+
+      <!-- Tombol Menu Ponsel -->
+      <button id="mobile-menu-btn" aria-label="Buka Menu" class="md:hidden p-2 rounded-lg text-stone-700 hover:bg-amber-100 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Dropdown Menu Ponsel -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-amber-100 px-4 pt-2 pb-4 space-y-2 text-sm font-semibold">
+      <a href="#deskripsi" class="block py-2 px-3 rounded-lg hover:bg-amber-50 text-stone-700">Produk</a>
+      <a href="#keunggulan" class="block py-2 px-3 rounded-lg hover:bg-amber-50 text-stone-700">Keunggulan</a>
+      <a href="#harga" class="block py-2 px-3 rounded-lg hover:bg-amber-50 text-stone-700">Detail &amp; Harga</a>
+      <a href="#galeri" class="block py-2 px-3 rounded-lg hover:bg-amber-50 text-stone-700">Galeri</a>
+      <a href="#kontak" class="block py-2.5 px-3 rounded-lg bg-orange-600 text-white text-center mt-2">Pesan Sekarang</a>
+    </div>
+  </header>
+
+  <!-- 1. BAGIAN PEMBUKA (HERO) -->
+  <section id="pembuka" class="relative overflow-hidden pt-10 pb-16 sm:pt-16 sm:pb-24 bg-gradient-to-b from-amber-100/70 via-amber-50/40 to-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+      <div class="space-y-6 text-center lg:text-left">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 text-orange-800 text-xs font-bold tracking-wide">
+          <span class="w-2 h-2 rounded-full bg-orange-600"></span>
+          Camilan Kukus Hangat &bull; Isian Keju Lumer
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold text-stone-900 leading-[1.15] tracking-tight">
+          Lembut di Luar, <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Kejutan Keju</span> Lumer di Dalam.
+        </h1>
+        <p class="text-base sm:text-lg text-stone-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+          <strong>Dimsum Keju</strong> dari <strong>Dimsum Kejutan</strong> memadukan adonan daging ayam pilihan yang kenyal dengan isian keju padat yang meleleh hangat saat digigit. Cocok untuk camilan pelajar maupun santai bersama keluarga.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+          <a href="#harga" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-sm sm:text-base shadow-lg shadow-orange-500/25 hover:brightness-105 transition text-center">
+            Lihat Varian &amp; Harga
+          </a>
+          <a href="#deskripsi" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white text-stone-800 font-bold text-sm sm:text-base border border-stone-200 hover:border-orange-300 hover:bg-amber-50/50 transition text-center">
+            Pelajari Produk
+          </a>
+        </div>
+      </div>
+
+      <!-- SLOT GAMBAR UTAMA (HERO) -->
+      <div class="relative mx-auto w-full max-w-md lg:max-w-none">
+        <div class="animate-float rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-amber-100/80 aspect-[4/3] relative flex items-center justify-center">
+          <!--
+            ===================================================================
+            SLOT GAMBAR 1 (FOTO UTAMA / KOTAK KEMASAN DIMSUM KEJUTAN)
+            Cara pakai: Ganti tulisan "URL_GAMBAR_UTAMA_DISINI" dengan link foto kamu.
+            Jika link sudah diisi, kotak panduan di bawahnya akan otomatis hilang.
+            ===================================================================
+          -->
+          <img
+            src="DIMSUMKEJUTAN1"
+            alt="Kemasan dan Sajian Dimsum Keju - Dimsum Kejutan"
+            class="w-full h-full object-cover"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="hidden flex-col items-center justify-center text-center p-6 w-full h-full border-2 border-dashed border-orange-400 rounded-2xl bg-amber-50/90">
+            <svg class="w-12 h-12 text-orange-500 mb-3" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span class="font-extrabold text-stone-800 text-sm sm:text-base">Slot Foto Utama / Kotak Dimsum</span>
+            <span class="text-xs text-stone-600 mt-1 max-w-xs">Ganti <code class="bg-orange-100 text-orange-800 px-1.5 py-0.5 rounded font-mono">URL_GAMBAR_UTAMA_DISINI</code> di dalam kode HTML dengan tautan foto produkmu.</span>
+          </div>
+        </div>
+        <div class="mt-2.5 text-center sm:text-right">
+          <span class="text-[11px] text-stone-500">Sumber Gambar: Dokumentasi / Ilustrasi AI Kelompok Dimsum Kejutan</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. DESKRIPSI PRODUK -->
+  <section id="deskripsi" class="py-16 sm:py-20 bg-white border-y border-amber-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-5">
+      <span class="text-xs font-extrabold uppercase tracking-widest text-orange-600">Tentang Produk</span>
+      <h2 class="text-2xl sm:text-4xl font-extrabold text-stone-900">Apa Itu Dimsum Keju?</h2>
+      <p class="text-stone-600 text-base sm:text-lg leading-relaxed">
+        <strong>Dimsum Keju</strong> adalah inovasi dimsum ayam kukus buatan rumahan dari merek <strong>Dimsum Kejutan</strong>. Berbeda dari dimsum biasa yang hanya memakai taburan di atasnya, setiap butir Dimsum Keju menyimpan potongan keju cheddar dan mozzarella di bagian tengah adonan. Ketika dikukus hangat, bagian dalam keju akan meleleh gurih berpadu dengan daging ayam yang lembut.
+      </p>
+      <div class="pt-4 grid sm:grid-cols-2 gap-4 text-left max-w-2xl mx-auto">
+        <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/70">
+          <h3 class="font-bold text-stone-900 text-sm mb-1">Target Calon Pembeli</h3>
+          <p class="text-xs sm:text-sm text-stone-600">Pelajar SMA, mahasiswa, serta keluarga yang mencari camilan gurih praktis, mengenyangkan, dan ramah di kantong.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-orange-50/70 border border-orange-200/70">
+          <h3 class="font-bold text-stone-900 text-sm mb-1">Cara Penyajian Praktis</h3>
+          <p class="text-xs sm:text-sm text-stone-600">Siap santap dalam kondisi hangat atau dapat dikukus kembali selama 5–7 menit sebelum disajikan bersama saus cocolan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. TIGA KEUNGGULAN PRODUK -->
+  <section id="keunggulan" class="py-16 sm:py-20 bg-amber-50/50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-orange-600">Mengapa Memilih Kami</span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-stone-900">Tiga Keunggulan Dimsum Keju</h2>
+        <p class="text-sm sm:text-base text-stone-600">Disusun berdasarkan komposisi bahan dan proses pengolahan produk yang terukur.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Keunggulan 1 -->
+        <div class="bg-white p-7 rounded-2xl border border-amber-100 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-extrabold text-xl mb-5">
+            01
+          </div>
+          <h3 class="text-lg font-extrabold text-stone-900 mb-2">Isian Keju di Bagian Dalam</h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Menggunakan campuran keju cheddar dan mozzarella yang dibungkus langsung di tengah adonan ayam, memberikan sensasi lumer saat dimsum disajikan hangat.
+          </p>
+        </div>
+
+        <!-- Keunggulan 2 -->
+        <div class="bg-white p-7 rounded-2xl border border-amber-100 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-extrabold text-xl mb-5">
+            02
+          </div>
+          <h3 class="text-lg font-extrabold text-stone-900 mb-2">Komposisi Daging Ayam Dominan</h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Adonan dibuat dengan takaran daging ayam giling yang lebih banyak dibandingkan tepung tapioka sehingga menghasilkan tekstur padat, lembut, dan tidak keras saat dingin.
+          </p>
+        </div>
+
+        <!-- Keunggulan 3 -->
+        <div class="bg-white p-7 rounded-2xl border border-amber-100 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-800 flex items-center justify-center font-extrabold text-xl mb-5">
+            03
+          </div>
+          <h3 class="text-lg font-extrabold text-stone-900 mb-2">Pilihan Paket Fleksibel</h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Tersedia dalam tiga ukuran kemasan (Isi 2, Isi 10, dan Isi 20) yang dapat disesuaikan untuk camilan pribadi di sekolah maupun stok camilan di rumah.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. DETAIL & HARGA -->
+  <section id="harga" class="py-16 sm:py-20 bg-white border-y border-amber-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-orange-600">Spesifikasi &amp; Paket</span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-stone-900">Detail Produk &amp; Daftar Harga</h2>
+        <p class="text-sm sm:text-base text-stone-600">Informasi bahan, ukuran per butir, serta pilihan paket bundle (harga simulasi proyek).</p>
+      </div>
+
+      <!-- Informasi Spesifikasi Produk -->
+      <div class="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-6 sm:p-8 mb-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <span class="text-xs font-bold uppercase text-orange-700 block mb-1">Bahan Utama</span>
+          <p class="text-sm font-semibold text-stone-800">Daging ayam giling, keju cheddar, keju mozzarella, tepung tapioka, bawang putih, minyak wijen, kulit pangsit.</p>
+        </div>
+        <div>
+          <span class="text-xs font-bold uppercase text-orange-700 block mb-1">Ukuran &amp; Berat</span>
+          <p class="text-sm font-semibold text-stone-800">Diameter &plusmn; 4–5 cm dengan berat bersih 35–40 gram per butir dimsum.</p>
+        </div>
+        <div>
+          <span class="text-xs font-bold uppercase text-orange-700 block mb-1">Pelengkap Sajian</span>
+          <p class="text-sm font-semibold text-stone-800">Setiap paket sudah termasuk saus sambal cocolan dalam kemasan terpisah.</p>
+        </div>
+        <div>
+          <span class="text-xs font-bold uppercase text-orange-700 block mb-1">Catatan Status</span>
+          <p class="text-sm font-semibold text-stone-800">Spesifikasi dan harga tercantum merupakan data simulasi proyek sekolah.</p>
+        </div>
+      </div>
+
+      <!-- Kartu Pilihan Paket Bundle -->
+      <div class="grid md:grid-cols-3 gap-6 items-stretch">
+        <!-- Paket Isi 2 -->
+        <div class="rounded-2xl border border-stone-200 bg-white p-7 flex flex-col justify-between hover:border-amber-400 transition">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold mb-4">Paket Coba</span>
+            <h3 class="text-xl font-extrabold text-stone-900">Bundle Isi 2</h3>
+            <p class="text-xs text-stone-500 mt-1">Cocok untuk camilan ringan saat istirahat.</p>
+            <div class="my-6">
+              <span class="text-3xl font-extrabold text-stone-900">Rp15.000</span>
+              <span class="text-xs text-stone-500 font-medium"> / porsi (2 pcs)</span>
+            </div>
+            <ul class="space-y-2.5 text-sm text-stone-600 mb-8">
+              <li class="flex items-center gap-2">
+                <span class="text-orange-600 font-bold">&#10003;</span> 2 butir Dimsum Keju hangat
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-orange-600 font-bold">&#10003;</span> 1 bungkus saus cocolan
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-orange-600 font-bold">&#10003;</span> Kemasan kertas praktis
+              </li>
+            </ul>
+          </div>
+          <button onclick="pilihPaket('Bundle Isi 2 — Rp15.000')" class="w-full py-3 rounded-xl border-2 border-orange-600 text-orange-600 font-bold text-sm hover:bg-orange-600 hover:text-white transition">
+            Pilih Paket (Simulasi)
+          </button>
+        </div>
+
+        <!-- Paket Isi 10 (Populer) -->
+        <div class="rounded-2xl border-2 border-orange-500 bg-gradient-to-b from-amber-50/80 to-white p-7 flex flex-col justify-between shadow-lg relative">
+          <div class="absolute -top-3.5 right-6 bg-orange-600 text-white text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+            Paling Diminati
+          </div>
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-orange-100 text-orange-800 text-xs font-bold mb-4">Paket Berbagi</span>
+            <h3 class="text-xl font-extrabold text-stone-900">Bundle Isi 10</h3>
+            <p class="text-xs text-stone-500 mt-1">Pas dinikmati bersama teman atau keluarga.</p>
+            <div class="my-6">
+              <span class="text-3xl font-extrabold text-stone-900">Rp70.000</span>
+              <span class="text-xs text-stone-500 font-medium"> / kotak (10 pcs)</span>
+            </div>
+            <ul class="space-y-2.5 text-sm text-stone-600 mb-8">
+              <li class="flex items-center gap-2">
+                <span class="text-orange-600 font-bold">&#10003;</span> 10 butir Dimsum Keju
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-orange-600 font-bold">&#10003;</span> 2 bungkus saus cocolan
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-orange-600 font-bold">&#10003;</span> Kotak kemasan eksklusif
+              </li>
+            </ul>
+          </div>
+          <button onclick="pilihPaket('Bundle Isi 10 — Rp70.000')" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-sm shadow-md hover:brightness-105 transition">
+            Pilih Paket (Simulasi)
+          </button>
+        </div>
+
+        <!-- Paket Isi 20 -->
+        <div class="rounded-2xl border border-stone-200 bg-white p-7 flex flex-col justify-between hover:border-amber-400 transition">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold mb-4">Paket Keluarga</span>
+            <h3 class="text-xl font-extrabold text-stone-900">Bundle Isi 20</h3>
+            <p class="text-xs text-stone-500 mt-1">Untuk acara kumpul atau stok di rumah.</p>
+            <div class="my-6">
+              <span class="text-3xl font-extrabold text-stone-900">Rp140.000</span>
+              <span class="text-xs text-stone-500 font-medium"> / paket (20 pcs)</span>
+            </div>
+            <ul class="space-y-2.5 text-sm text-stone-600 mb-8">
+              <li class="flex items-center gap-2">
+                <span class="text-orange-600 font-bold">&#10003;</span> 20 butir Dimsum Keju
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-orange-600 font-bold">&#10003;</span> 4 bungkus saus cocolan
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-orange-600 font-bold">&#10003;</span> Tersedia opsi siap kukus / hangat
+              </li>
+            </ul>
+          </div>
+          <button onclick="pilihPaket('Bundle Isi 20 — Rp140.000')" class="w-full py-3 rounded-xl border-2 border-orange-600 text-orange-600 font-bold text-sm hover:bg-orange-600 hover:text-white transition">
+            Pilih Paket (Simulasi)
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. GALERI PRODUK (SLOT GAMBAR SIAP ISI) -->
+  <section id="galeri" class="py-16 sm:py-20 bg-amber-50/40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-orange-600">Tampilan Produk</span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-stone-900">Galeri Dimsum Keju</h2>
+        <p class="text-sm sm:text-base text-stone-600">Dokumentasi tampilan penyajian dan tekstur produk Dimsum Kejutan.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- SLOT GAMBAR GALERI 1 -->
+        <figure class="bg-white rounded-2xl overflow-hidden border border-amber-100 shadow-sm">
+          <div class="aspect-[16/10] overflow-hidden bg-amber-100/60 relative flex items-center justify-center">
+            <!--
+              ===================================================================
+              SLOT GAMBAR GALERI 1
+              Ganti "URL_GAMBAR_GALERI_1" dengan tautan foto dimsum pertama kamu.
+              ===================================================================
+            -->
+            <img
+              src="URL_GAMBAR_GALERI_1"
+              alt="Sajian Dimsum Keju Kukus Hangat"
+              class="w-full h-full object-cover hover:scale-105 transition duration-500"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="hidden flex-col items-center justify-center text-center p-6 w-full h-full border-2 border-dashed border-amber-400 bg-amber-50/90">
+              <svg class="w-10 h-10 text-amber-600 mb-2" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span class="font-bold text-stone-800 text-sm">Slot Foto Galeri 1</span>
+              <span class="text-xs text-stone-600 mt-1">Ganti <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono">URL_GAMBAR_GALERI_1</code> di kode HTML.</span>
+            </div>
+          </div>
+          <figcaption class="p-4 sm:p-5">
+            <h3 class="font-bold text-stone-900 text-base">Sajian Hangat dari Kukusan</h3>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1">Dimsum dikukus hingga matang merata sehingga kulit tetap lembut dan tidak kering.</p>
+            <span class="block text-[11px] text-stone-400 mt-2">Sumber Gambar: Dokumentasi / Ilustrasi Kelompok</span>
+          </figcaption>
+        </figure>
+
+        <!-- SLOT GAMBAR GALERI 2 -->
+        <figure class="bg-white rounded-2xl overflow-hidden border border-amber-100 shadow-sm">
+          <div class="aspect-[16/10] overflow-hidden bg-amber-100/60 relative flex items-center justify-center">
+            <!--
+              ===================================================================
+              SLOT GAMBAR GALERI 2
+              Ganti "URL_GAMBAR_GALERI_2" dengan tautan foto dimsum kedua kamu.
+              ===================================================================
+            -->
+            <img
+              src="URL_GAMBAR_GALERI_2"
+              alt="Tekstur Lembut Dimsum Keju"
+              class="w-full h-full object-cover hover:scale-105 transition duration-500"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="hidden flex-col items-center justify-center text-center p-6 w-full h-full border-2 border-dashed border-amber-400 bg-amber-50/90">
+              <svg class="w-10 h-10 text-amber-600 mb-2" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span class="font-bold text-stone-800 text-sm">Slot Foto Galeri 2</span>
+              <span class="text-xs text-stone-600 mt-1">Ganti <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono">URL_GAMBAR_GALERI_2</code> di kode HTML.</span>
+            </div>
+          </div>
+          <figcaption class="p-4 sm:p-5">
+            <h3 class="font-bold text-stone-900 text-base">Tekstur Lembut &amp; Padat</h3>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1">Perpaduan adonan daging ayam pilihan dengan lelehan keju gurih di bagian tengah.</p>
+            <span class="block text-[11px] text-stone-400 mt-2">Sumber Gambar: Dokumentasi / Ilustrasi Kelompok</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. AJAKAN BERTINDAK (CTA) & KONTAK SIMULASI -->
+  <section id="kontak" class="py-16 sm:py-20 bg-gradient-to-br from-orange-600 to-amber-500 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
+      <span class="inline-block px-3.5 py-1 rounded-full bg-white/20 text-white text-xs font-bold uppercase tracking-wider">
+        Pemesanan Simulasi
+      </span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight">
+        Siap Mencoba Hangatnya Dimsum Keju?
+      </h2>
+      <p class="text-amber-50 text-base sm:text-lg max-w-xl mx-auto">
+        Pilih paket bundle favoritmu dan hubungi layanan pemesanan simulasi kami untuk informasi ketersediaan stok.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        <button onclick="pilihPaket('Pemesanan Umum — Dimsum Keju')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-stone-900 text-amber-300 font-extrabold text-sm sm:text-base shadow-xl hover:bg-stone-800 transition">
+          Pesan Sekarang (Simulasi)
+        </button>
+        <a href="#harga" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/15 backdrop-blur-sm border border-white/30 text-white font-bold text-sm sm:text-base hover:bg-white/25 transition">
+          Bandingkan Paket Harga
+        </a>
+      </div>
+
+      <!-- Informasi Kontak Simulasi -->
+      <div class="pt-8 mt-8 border-t border-white/20 grid sm:grid-cols-3 gap-4 text-xs sm:text-sm text-amber-50">
+        <div>
+          <strong class="block text-white">WhatsApp (Simulasi)</strong>
+          <span>0812-0000-2026</span>
+        </div>
+        <div>
+          <strong class="block text-white">Instagram (Simulasi)</strong>
+          <span>@dimsumkejutan.id</span>
+        </div>
+        <div>
+          <strong class="block text-white">Area Layanan (Simulasi)</strong>
+          <span>Tangerang Selatan &amp; Sekitarnya</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER & LABEL PROYEK WAJIB -->
+  <footer class="bg-stone-950 text-stone-400 py-10 px-4 sm:px-6 text-xs sm:text-sm">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+      <div>
+        <p class="font-extrabold text-white text-base">Dimsum Kejutan — Dimsum Keju</p>
+        <p class="mt-1 text-stone-400">
+          Seluruh informasi harga, spesifikasi, dan kontak pada halaman ini bersifat simulasi untuk kebutuhan pembelajaran.
+        </p>
+      </div>
+      <div class="px-4 py-2.5 rounded-xl bg-stone-900 border border-stone-800 text-amber-300 font-semibold">
+        Proyek pembelajaran kelas X SMA Erenos
+      </div>
+    </div>
+  </footer>
+
+  <!-- Notifikasi Toast Interaktif -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 max-w-sm bg-stone-900 text-white px-5 py-4 rounded-2xl shadow-2xl border border-stone-700 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="flex items-start gap-3">
+      <span class="w-6 h-6 rounded-full bg-amber-400 text-stone-950 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">&#10003;</span>
+      <div>
+        <p class="font-bold text-sm text-amber-300">Simulasi Pemesanan Dicatat</p>
+        <p id="toast-msg" class="text-xs text-stone-300 mt-0.5">Paket dipilih.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle Menu Ponsel
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Tutup menu ponsel saat tautan diklik
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Notifikasi Toast saat tombol CTA diklik
+    let toastTimeout;
+    function pilihPaket(namaPaket) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.textContent = namaPaket + ' (Kontak simulasi: 0812-0000-2026).';
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
