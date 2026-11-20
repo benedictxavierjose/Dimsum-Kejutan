@@ -33,10 +33,7 @@
     .animate-progress {
       animation: loadingBar 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
-    /* Menyembunyikan kontrol bawaan video pada semua browser */
-    video::-webkit-media-controls {
-      display: none !important;
-    }
+    video::-webkit-media-controls,
     video::-webkit-media-controls-enclosure {
       display: none !important;
     }
@@ -45,8 +42,27 @@
 <body class="bg-amber-50/40 text-stone-800 antialiased selection:bg-amber-300 selection:text-stone-900 overflow-hidden" id="main-body">
 
   <!-- =====================================================================
-       OVERLAY 1 & 2: CINEMATIC LOADING SCREEN + VIDEO IKLAN FULLSCREEN
+       PENGATURAN LINK VIDEO & GAMBAR (EDIT BAGIAN INI SAJA)
        ===================================================================== -->
+  <script>
+    const KONFIGURASI_MEDIA = {
+      // PILIH SALAH SATU JENIS VIDEO:
+      // 1. Jika pakai YouTube (Unlisted/Public): masukkan link YouTube biasa, contoh: "https://youtu.be/AbCdEf12345"
+      // 2. Jika pakai Google Drive: masukkan link Share Google Drive, contoh: "https://drive.google.com/file/d/1AbCdEf.../view?usp=sharing"
+      // 3. Jika pakai file .mp4 online: masukkan link .mp4 nya
+      LINK_VIDEO_IKLAN: "https://www.youtube.com/watch?v=nt9Lvs1W2Gs",
+
+      // Durasi video dalam detik (dipakai otomatis menutup video jika pakai YouTube/Drive)
+      DURASI_VIDEO_DETIK: 15,
+
+      // Link Gambar (Bisa pakai link Google Drive Share atau link gambar online lainnya)
+      GAMBAR_UTAMA: "DIMSUMKEJUTAN1",
+      GAMBAR_GALERI_1: "URL_GAMBAR_GALERI_1",
+      GAMBAR_GALERI_2: "URL_GAMBAR_GALERI_2"
+    };
+  </script>
+
+  <!-- OVERLAY 1 & 2: CINEMATIC LOADING SCREEN + VIDEO IKLAN FULLSCREEN -->
   <div id="cinematic-overlay" class="fixed inset-0 z-50 bg-stone-950 text-white flex flex-col items-center justify-center transition-opacity duration-700">
     
     <!-- TAHAP 1: CINEMATIC INTRO & LOADING -->
@@ -58,13 +74,11 @@
       <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">Dimsum Kejutan</h2>
       <p class="text-sm text-stone-400 mb-8">Lembut di Luar, Kejutan Keju Lumer di Dalam</p>
 
-      <!-- Progress Bar Sinematik -->
       <div id="loading-bar-container" class="w-full h-1.5 bg-stone-800 rounded-full overflow-hidden mb-3">
         <div class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-amber-300 animate-progress"></div>
       </div>
       <p id="loading-status" class="text-xs text-stone-400 tracking-wider uppercase mb-6">Menyiapkan Pengalaman...</p>
 
-      <!-- Tombol Mulai (Memicu Sound Sinematik + Video Iklan Bersuara) -->
       <button
         id="start-experience-btn"
         onclick="startCinematicExperience()"
@@ -75,42 +89,18 @@
       </button>
     </div>
 
-    <!-- TAHAP 2: VIDEO IKLAN FULLSCREEN TANPA CONTROL BAR -->
-    <div id="ad-video-stage" class="hidden fixed inset-0 bg-black flex items-center justify-center">
-      <!--
-        ===================================================================
-        SLOT VIDEO IKLAN
-        Ganti "URL_VIDEO_IKLAN_DISINI.mp4" dengan tautan file video .mp4 kamu.
-        Atribut "controls" sengaja TIDAK dipasang agar bar durasi & navigasi
-        di bawah video tidak muncul sama sekali.
-        ===================================================================
-      -->
-      <video
-        id="promo-video"
-        class="w-full h-full object-contain sm:object-cover pointer-events-none select-none"
-        playsinline
-        preload="auto"
-        onended="enterWebsite()"
-        onerror="handleVideoFallback()"
-      >
-        <source src="VIDEOIKLAN.mp4" type="video/mp4" />
-      </video>
+    <!-- TAHAP 2: VIDEO IKLAN FULLSCREEN TANPA BAR DURASI BAWAH -->
+    <div id="ad-video-stage" class="hidden fixed inset-0 bg-black flex items-center justify-center overflow-hidden">
+      <!-- Container pemutar otomatis (YouTube / Google Drive / MP4) -->
+      <div id="video-player-wrapper" class="w-full h-full relative flex items-center justify-center"></div>
 
-      <!-- Fallback Visual jika URL video belum diisi agar tetap terlihat sinematik -->
-      <div id="video-fallback-banner" class="hidden flex-col items-center text-center px-6 max-w-lg">
-        <span class="px-3 py-1 rounded-full bg-orange-500/20 border border-orange-500/40 text-amber-300 text-xs font-bold uppercase tracking-widest mb-4">
-          Slot Video Iklan Aktif
-        </span>
-        <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">Tautan Video Belum Diisi</h3>
-        <p class="text-sm text-stone-300 leading-relaxed mb-6">
-          Ganti <code class="bg-stone-800 text-amber-300 px-2 py-0.5 rounded font-mono">URL_VIDEO_IKLAN_DISINI.mp4</code> di dalam kode HTML dengan link video iklan kelompokmu. Website akan otomatis terbuka dalam beberapa detik.
-        </p>
-      </div>
+      <!-- Lapisan pelindung transparan agar bar durasi & kontrol bawah tidak bisa muncul saat disentuh/di-hover -->
+      <div class="fixed inset-0 z-40 pointer-events-auto bg-transparent"></div>
 
-      <!-- Tombol Lewati Iklan (Pojok Kanan Atas, Tanpa Bar Durasi Bawah) -->
+      <!-- Tombol Lewati Iklan (Di atas lapisan pelindung) -->
       <button
         onclick="enterWebsite()"
-        class="fixed top-5 right-5 z-50 px-4 py-2 rounded-full bg-stone-900/80 hover:bg-stone-800 border border-white/20 text-white/90 text-xs font-semibold backdrop-blur-md transition cursor-pointer"
+        class="fixed top-5 right-5 z-50 px-4 py-2 rounded-full bg-stone-900/85 hover:bg-stone-800 border border-white/25 text-white text-xs font-semibold backdrop-blur-md transition cursor-pointer shadow-lg"
       >
         Lewati Iklan &rarr;
       </button>
@@ -135,7 +125,6 @@
         </div>
       </a>
 
-      <!-- Menu Desktop -->
       <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-stone-600">
         <a href="#deskripsi" class="hover:text-orange-600 transition">Produk</a>
         <a href="#keunggulan" class="hover:text-orange-600 transition">Keunggulan</a>
@@ -146,7 +135,6 @@
         </a>
       </nav>
 
-      <!-- Tombol Menu Ponsel -->
       <button id="mobile-menu-btn" aria-label="Buka Menu" class="md:hidden p-2 rounded-lg text-stone-700 hover:bg-amber-100 transition">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -154,7 +142,6 @@
       </button>
     </div>
 
-    <!-- Dropdown Menu Ponsel -->
     <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-amber-100 px-4 pt-2 pb-4 space-y-2 text-sm font-semibold">
       <a href="#deskripsi" class="block py-2 px-3 rounded-lg hover:bg-amber-50 text-stone-700">Produk</a>
       <a href="#keunggulan" class="block py-2 px-3 rounded-lg hover:bg-amber-50 text-stone-700">Keunggulan</a>
@@ -188,21 +175,19 @@
         </div>
       </div>
 
-      <!-- SLOT GAMBAR UTAMA (HERO) -->
+      <!-- SLOT GAMBAR UTAMA -->
       <div class="relative mx-auto w-full max-w-md lg:max-w-none">
         <div class="animate-float rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-amber-100/80 aspect-[4/3] relative flex items-center justify-center">
           <img
-            src="DIMSUMKEJUTAN1"
+            id="img-slot-utama"
+            src=""
             alt="Kemasan dan Sajian Dimsum Keju - Dimsum Kejutan"
             class="w-full h-full object-cover"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
           />
           <div class="hidden flex-col items-center justify-center text-center p-6 w-full h-full border-2 border-dashed border-orange-400 rounded-2xl bg-amber-50/90">
-            <svg class="w-12 h-12 text-orange-500 mb-3" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
             <span class="font-extrabold text-stone-800 text-sm sm:text-base">Slot Foto Utama / Kotak Dimsum</span>
-            <span class="text-xs text-stone-600 mt-1 max-w-xs">Ganti <code class="bg-orange-100 text-orange-800 px-1.5 py-0.5 rounded font-mono">URL_GAMBAR_UTAMA_DISINI</code> di dalam kode HTML dengan tautan foto produkmu.</span>
+            <span class="text-xs text-stone-600 mt-1 max-w-xs">Isi <code class="bg-orange-100 text-orange-800 px-1.5 py-0.5 rounded font-mono">GAMBAR_UTAMA</code> di bagian atas kode dengan link Google Drive/gambar.</span>
           </div>
         </div>
         <div class="mt-2.5 text-center sm:text-right">
@@ -375,21 +360,18 @@
       </div>
 
       <div class="grid md:grid-cols-2 gap-8">
-        <!-- SLOT GAMBAR GALERI 1 -->
         <figure class="bg-white rounded-2xl overflow-hidden border border-amber-100 shadow-sm">
           <div class="aspect-[16/10] overflow-hidden bg-amber-100/60 relative flex items-center justify-center">
             <img
-              src="URL_GAMBAR_GALERI_1"
+              id="img-slot-galeri-1"
+              src=""
               alt="Sajian Dimsum Keju Kukus Hangat"
               class="w-full h-full object-cover hover:scale-105 transition duration-500"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="hidden flex-col items-center justify-center text-center p-6 w-full h-full border-2 border-dashed border-amber-400 bg-amber-50/90">
-              <svg class="w-10 h-10 text-amber-600 mb-2" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
               <span class="font-bold text-stone-800 text-sm">Slot Foto Galeri 1</span>
-              <span class="text-xs text-stone-600 mt-1">Ganti <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono">URL_GAMBAR_GALERI_1</code> di kode HTML.</span>
+              <span class="text-xs text-stone-600 mt-1">Isi <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono">GAMBAR_GALERI_1</code> di bagian atas kode.</span>
             </div>
           </div>
           <figcaption class="p-4 sm:p-5">
@@ -399,21 +381,18 @@
           </figcaption>
         </figure>
 
-        <!-- SLOT GAMBAR GALERI 2 -->
         <figure class="bg-white rounded-2xl overflow-hidden border border-amber-100 shadow-sm">
           <div class="aspect-[16/10] overflow-hidden bg-amber-100/60 relative flex items-center justify-center">
             <img
-              src="URL_GAMBAR_GALERI_2"
+              id="img-slot-galeri-2"
+              src=""
               alt="Tekstur Lembut Dimsum Keju"
               class="w-full h-full object-cover hover:scale-105 transition duration-500"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="hidden flex-col items-center justify-center text-center p-6 w-full h-full border-2 border-dashed border-amber-400 bg-amber-50/90">
-              <svg class="w-10 h-10 text-amber-600 mb-2" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
               <span class="font-bold text-stone-800 text-sm">Slot Foto Galeri 2</span>
-              <span class="text-xs text-stone-600 mt-1">Ganti <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono">URL_GAMBAR_GALERI_2</code> di kode HTML.</span>
+              <span class="text-xs text-stone-600 mt-1">Isi <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono">GAMBAR_GALERI_2</code> di bagian atas kode.</span>
             </div>
           </div>
           <figcaption class="p-4 sm:p-5">
@@ -492,8 +471,22 @@
   </div>
 
   <script>
-    // 1. LOGIKA CINEMATIC LOADING + SOUND EFFECT OTOMATIS + VIDEO IKLAN
+    // Konversi otomatis link Google Drive Share menjadi Direct Image URL
+    function formatGDriveImage(url) {
+      if (!url) return "";
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (url.includes("drive.google.com") && match && match[1]) {
+        return `https://lh3.googleusercontent.com/d/${match[1]}`;
+      }
+      return url;
+    }
+
+    // Terapkan gambar dari KONFIGURASI_MEDIA saat halaman dimuat
     window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('img-slot-utama').src = formatGDriveImage(KONFIGURASI_MEDIA.GAMBAR_UTAMA);
+      document.getElementById('img-slot-galeri-1').src = formatGDriveImage(KONFIGURASI_MEDIA.GAMBAR_GALERI_1);
+      document.getElementById('img-slot-galeri-2').src = formatGDriveImage(KONFIGURASI_MEDIA.GAMBAR_GALERI_2);
+
       setTimeout(() => {
         document.getElementById('loading-status').textContent = 'Siap Diputar';
         const startBtn = document.getElementById('start-experience-btn');
@@ -502,14 +495,13 @@
       }, 2200);
     });
 
-    // Generator Sound Effect Sinematik (Chord Hangat + Whoosh) via Web Audio API
+    // Sound Effect Sinematik Otomatis (Web Audio API)
     function playCinematicIntroSound() {
       try {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         const ctx = new AudioCtx();
         const now = ctx.currentTime;
 
-        // Efek suara dentuman bass lembut (Sub-drop sinematik)
         const subOsc = ctx.createOscillator();
         const subGain = ctx.createGain();
         subOsc.type = 'sine';
@@ -523,7 +515,6 @@
         subOsc.start(now);
         subOsc.stop(now + 1.65);
 
-        // Harmoni akor kristal hangat (C Major 9)
         const notes = [261.63, 329.63, 392.00, 493.88, 587.33];
         notes.forEach((freq, idx) => {
           const osc = ctx.createOscillator();
@@ -540,17 +531,18 @@
           osc.start(now + idx * 0.06);
           osc.stop(now + 2.3);
         });
-      } catch (e) {
-        // Abaikan jika perangkat tidak mendukung Web Audio
-      }
+      } catch (e) {}
     }
+
+    let autoExitTimer;
 
     function startCinematicExperience() {
       playCinematicIntroSound();
 
       const introStage = document.getElementById('intro-stage');
       const adStage = document.getElementById('ad-video-stage');
-      const promoVideo = document.getElementById('promo-video');
+      const wrapper = document.getElementById('video-player-wrapper');
+      const rawUrl = (KONFIGURASI_MEDIA.LINK_VIDEO_IKLAN || "").trim();
 
       introStage.classList.add('opacity-0', 'scale-95');
 
@@ -558,47 +550,79 @@
         introStage.classList.add('hidden');
         adStage.classList.remove('hidden');
 
-        // Putar video iklan penuh tanpa kontrol bawah
-        promoVideo.muted = false;
-        const playPromise = promoVideo.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            handleVideoFallback();
+        // Deteksi YouTube
+        const ytMatch = rawUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+        // Deteksi Google Drive
+        const gdMatch = rawUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+        if (ytMatch && ytMatch[1]) {
+          const videoId = ytMatch[1];
+          // controls=0 & modestbranding=1 menyembunyikan bar durasi bawah YouTube
+          wrapper.innerHTML = `
+            <iframe
+              class="w-full h-full scale-[1.03] pointer-events-none"
+              src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&disablekb=1&playsinline=1"
+              frameborder="0"
+              allow="autoplay; encrypted-media"
+            ></iframe>
+          `;
+          autoExitTimer = setTimeout(enterWebsite, (KONFIGURASI_MEDIA.DURASI_VIDEO_DETIK || 15) * 1000);
+        } else if (rawUrl.includes("drive.google.com") && gdMatch && gdMatch[1]) {
+          const fileId = gdMatch[1];
+          wrapper.innerHTML = `
+            <iframe
+              class="w-full h-full scale-[1.04] pointer-events-none"
+              src="https://drive.google.com/file/d/${fileId}/preview?autoplay=1"
+              frameborder="0"
+              allow="autoplay"
+            ></iframe>
+          `;
+          autoExitTimer = setTimeout(enterWebsite, (KONFIGURASI_MEDIA.DURASI_VIDEO_DETIK || 15) * 1000);
+        } else if (rawUrl && !rawUrl.includes("MASUKKAN_LINK")) {
+          // Direct MP4 Link
+          const vid = document.createElement('video');
+          vid.src = rawUrl;
+          vid.className = "w-full h-full object-contain sm:object-cover pointer-events-none select-none";
+          vid.playsInline = true;
+          vid.autoplay = true;
+          vid.onended = enterWebsite;
+          wrapper.appendChild(vid);
+          vid.play().catch(() => {
+            autoExitTimer = setTimeout(enterWebsite, 4000);
           });
+        } else {
+          wrapper.innerHTML = `
+            <div class="flex flex-col items-center text-center px-6 max-w-lg">
+              <span class="px-3 py-1 rounded-full bg-orange-500/20 border border-orange-500/40 text-amber-300 text-xs font-bold uppercase tracking-widest mb-4">
+                Panduan Pemasangan Video
+              </span>
+              <h3 class="text-2xl font-extrabold text-white mb-2">Masukkan Link YouTube / Google Drive</h3>
+              <p class="text-sm text-stone-300 leading-relaxed">
+                Tempel link video YouTube (Unlisted) atau link Share Google Drive pada bagian <code class="bg-stone-800 text-amber-300 px-1.5 py-0.5 rounded font-mono">LINK_VIDEO_IKLAN</code> di bagian atas kode HTML.
+              </p>
+            </div>
+          `;
+          autoExitTimer = setTimeout(enterWebsite, 4500);
         }
       }, 450);
     }
 
-    function handleVideoFallback() {
-      const promoVideo = document.getElementById('promo-video');
-      const fallbackBanner = document.getElementById('video-fallback-banner');
-      promoVideo.classList.add('hidden');
-      fallbackBanner.classList.remove('hidden');
-      fallbackBanner.classList.add('flex');
-
-      // Otomatis masuk ke website setelah 4 detik jika video belum diisi
-      setTimeout(() => {
-        enterWebsite();
-      }, 4000);
-    }
-
     function enterWebsite() {
+      clearTimeout(autoExitTimer);
       const overlay = document.getElementById('cinematic-overlay');
-      const promoVideo = document.getElementById('promo-video');
+      const wrapper = document.getElementById('video-player-wrapper');
       const body = document.getElementById('main-body');
 
-      if (promoVideo) {
-        promoVideo.pause();
-      }
       overlay.classList.add('opacity-0', 'pointer-events-none');
       body.classList.remove('overflow-hidden');
 
       setTimeout(() => {
+        wrapper.innerHTML = ''; // Hentikan suara video sepenuhnya
         overlay.style.display = 'none';
       }, 700);
     }
 
-    // 2. TOGGLE MENU PONSEL
+    // Toggle Menu Ponsel
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     menuBtn.addEventListener('click', () => {
@@ -611,7 +635,7 @@
       });
     });
 
-    // 3. NOTIFIKASI TOAST SIMULASI PEMESANAN
+    // Notifikasi Toast
     let toastTimeout;
     function pilihPaket(namaPaket) {
       const toast = document.getElementById('toast');
